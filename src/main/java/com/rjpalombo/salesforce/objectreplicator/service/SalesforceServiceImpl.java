@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rjpalombo.salesforce.objectreplicator.config.SalesforceConfig;
@@ -26,7 +25,6 @@ public class SalesforceServiceImpl implements SalesforceService {
 	private PartnerConnection connection;
 	private BulkConnection bulkConnection;
 
-	@Autowired
 	private SalesforceServiceImpl(SalesforceConfig config) throws ConnectionException, AsyncApiException {
 		this.config = config;
 
@@ -36,13 +34,13 @@ public class SalesforceServiceImpl implements SalesforceService {
 		partnerConfig.setPassword(config.getPassword());
 		partnerConfig.setPrettyPrintXml(true);
 		this.connection = new PartnerConnection(partnerConfig);
-		
+
 		String soapEndpoint = partnerConfig.getServiceEndpoint();
 		String restEndpoint = soapEndpoint.substring(0, soapEndpoint.indexOf("Soap/")) + "async/" + config.getApiversion();
 		partnerConfig.setRestEndpoint(restEndpoint);
 		this.bulkConnection = new BulkConnection(partnerConfig);
 	}
-	
+
 	public PartnerConnection getConnection() {
 		return connection;
 	}
